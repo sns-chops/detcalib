@@ -1,0 +1,30 @@
+
+Please see below a protocol for the commissioning measurements for SEQUOUA, IPTS-19573.1, July 10-14, 2017
+
+Room temperature, CCR-22 with 3-sample changer configuration, no heat shield.
+
+C60-powder (m=?? g), in aluminum flat container 5x5cm2 plus BN-mask
+Vanadium (wide, baked)
+Si-powder (m=1.57 g), in cylindrical vanadium container
+
+Run # 130248, Vanadium 5x5cm2, White beam, Ei set to 110 meV, T0=150 Hz, Attn1 in the beam, all slits 2 = 25, PC=6 C
+
+Run # 130249-130252, C60, White beam, Ei set to 250 meV, T0=30 Hz, no Attn in the beam, all slits 2 = 25, PC=6x4=24 C
+Run # 130253-130254, C60, Ei=600 meV, F1=600 Hz, T0=150 Hz, PC=6x2=12 C
+Run # 130255-130256, C60, Ei=250 meV, F1=360 Hz, T0=120 Hz, PC=6x2=12 C
+Run # 130257-130258, C60, Ei=60 meV, F1=180 Hz, T0=60 Hz, PC=6x2=12 C
+
+Run # 130259, Vanadium 5x5cm2, Ei=10 meV, F2=300 Hz, T0=30 Hz, PC=3 C
+Run # 130260, Vanadium 5x5cm2, Ei=55 meV, F2=420 Hz, T0=90 Hz, PC=3 C
+Run # 130261, Vanadium 5x5cm2, Ei=160 meV, F2=600 Hz, T0=120 Hz, PC=3 C
+
+For Si sample slits were: s2l=6, s2r=5, s2b=15, s2t=14
+Run # 130262-130263, Si-powder, Ei=600 meV, F1=600 Hz, T0=150 Hz, PC=6x2=12 C
+Run # 130264, Si-powder, Ei=250 meV, F1=360 Hz, T0=120 Hz, PC=6-? C – detectors/vacuum problem, run is not good
+
+Run # 130268, Vanadium 5x5cm2, White beam, Ei set to 110 meV, T0=150 Hz, Attn1 in the beam, all slits 2 = 25, PC=6 C
+
+For Si sample slits were: s2l=6, s2r=5, s2b=15, s2t=14
+Run # 130269-130270, Si-powder, Ei=250 meV, F1=360 Hz, T0=120 Hz, PC=6x2=12 C
+Run # 130271-130272, Si-powder, Ei=60 meV, F1=180 Hz, T0=60 Hz, PC=6x2=12 C
+Run # 130273-130278, Si-powder, White beam, Ei set to 250 meV, T0=30 Hz, no Attn in the beam, PC=6x6=36 C
