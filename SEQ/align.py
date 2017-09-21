@@ -1,10 +1,9 @@
 def opts2fullparams(x, params0, options):
-    """                                                                                                                                                                                                                                                                                                   
-    Creates an array combining the refining and constant variables                                                                                                                                                                                                                                        
-    This is required because scipy.optimise.minimise expect a constant                                                                                                                                                                                                                                    
-    number of variable, so need to be able to maps any number of                                                                                                                                                                                                                                          
-    inputs to six outputs.                                                                                                                                                                                                                                                                                
-
+    """ 
+    Creates an array combining the refining and constant variables
+    This is required because scipy.optimise.minimise expect a constant
+    number of variable, so need to be able to maps any number of      
+    inputs to six outputs. 
     """
     x0_index = 0
     out = []
@@ -19,8 +18,8 @@ def opts2fullparams(x, params0, options):
 
 
 def eulerToQuat(alpha, beta, gamma, convention):
-    """                                                                                                                                                                                                                                                                                                   
-    Convert Euler angles to a quaternion                                                                                                                                                                                                                                                                  
+    """                    
+    Convert Euler angles to a quaternion
     """
     from mantid.kernel import Quat, V3D
     getV3D = {'X': V3D(1, 0, 0), 'Y': V3D(0, 1, 0), 'Z': V3D(0, 0, 1)}
@@ -28,8 +27,8 @@ def eulerToQuat(alpha, beta, gamma, convention):
             Quat(gamma, getV3D[convention[2]]))
 
 def eulerToAngleAxis(alpha, beta, gamma, convention):
-    """                                                                                                                                                                                                                                                                                                   
-    Convert Euler angles to a angle rotation around an axis                                                                                                                                                                                                                                               
+    """
+    Convert Euler angles to a angle rotation around an axis
     """
     quat = eulerToQuat(alpha, beta, gamma, convention)
     if quat[0] == 1:
@@ -161,7 +160,7 @@ class FitSourceSample(object):
             method='L-BFGS-B',
             bounds=boundsList)
 
-        # Apply the results to the output workspace                                                                                                                                                                                                                                                   
+        # Apply the results to the output workspace
         params = opts2fullparams(results.x, params0, options)
         self.adjust_model(params)
         # Need to grab the component again, as things have changed   
@@ -262,7 +261,7 @@ class FitPack(object):
             # x0=x0List, method='L-BFGS-B',
             bounds=boundsList)
 
-        # Apply the results to the output workspace                                                                                                                                                                                                                                                   
+        # Apply the results to the output workspace
         params = opts2fullparams(results.x, params0, options)
         self.adjust_model(params)
         # Need to grab the component again, as things have changed   
@@ -323,8 +322,8 @@ class FitPackTwothetaAndL2(FitPack):
     
     
 def getFirstDetID(component):
-    """                                                                                                                                                                                                                                                                                                   
-    recursive search to find first detID of a component                                                                                                                                                                                                                                                   
+    """
+    recursive search to find first detID of a component 
     """
     if component.type() == 'DetectorComponent' or component.type() == 'RectangularDetectorPixel':
         return component.getID()
@@ -333,8 +332,8 @@ def getFirstDetID(component):
 
     
 def getLastDetID(component):
-    """                                                                                                                                                                                                                                                                                                   
-    recursive search to find last detID of a component                                                                                                                                                                                                                                                    
+    """  
+    recursive search to find last detID of a component 
     """
     if component.type() == 'DetectorComponent' or component.type() == 'RectangularDetectorPixel':
         return component.getID()
