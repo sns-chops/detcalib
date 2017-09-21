@@ -1,3 +1,7 @@
+from mantid import simpleapi as msa, mtd
+import numpy as np, os, math
+import scipy.optimize as sopt
+
 def opts2fullparams(x, params0, options):
     """ 
     Creates an array combining the refining and constant variables
@@ -142,6 +146,7 @@ class FitSourceSample(object):
     def fit(self):
         comp_model = self.comp_model
         options = self.options
+        logger = self.logger
         logger.info(
             "Working on %s. Starting position is %s, Starting rotation is %s" % (
                 comp_model.fullname, comp_model.position(), comp_model.eulerAngles())
@@ -236,6 +241,7 @@ class FitPack(object):
     def fit(self):
         pack_model = self.pack_model
         options = self.options
+        logger = self.logger
         mask_out = pack_model.mask
         if mask_out.sum() == mask_out.size:
             logger.warning("All pixels in '%s' are masked. Skipping calibration." % pack_model.name)
