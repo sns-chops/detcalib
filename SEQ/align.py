@@ -67,7 +67,7 @@ class InstrumentModel(object):
             msa.MoveInstrumentComponent(wks_name, component, X=pos[0], Y=pos[1], Z=pos[2], RelativePosition=False)
 
         if rot:
-            (rotw, rotx, roty, rotz) = eulerToAngleAxis(rot[0], rot[1], rot[2], eulerConvention)
+            (rotw, rotx, roty, rotz) = eulerToAngleAxis(rot[0], rot[1], rot[2], self.eulerConvention)
             msa.RotateInstrumentComponent(
                 wks_name, component, X=rotx, Y=roty, Z=rotz, Angle=rotw, RelativeRotation=False)
         return
@@ -261,10 +261,10 @@ class FitPack(object):
             x0List.append(params0[iopt])
             boundsList.append((params0[iopt]+min, params0[iopt]+max))            
 
-        results = sopt.differential_evolution(
-        # results = sopt.minimize(
+        # results = sopt.differential_evolution(
+        results = sopt.minimize(
             self.cost, 
-            # x0=x0List, method='L-BFGS-B',
+            x0=x0List, method='L-BFGS-B',
             bounds=boundsList)
 
         # Apply the results to the output workspace
@@ -277,6 +277,7 @@ class FitPack(object):
                 pack_model.fullname, pack_model.position(), pack_model.eulerAngles())
             )        
         return
+
 
 class FitPackDifc(FitPack):
     
