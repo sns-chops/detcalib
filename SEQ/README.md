@@ -25,11 +25,11 @@ The basic idea is
 
 # Vanadium powder data: L2
 
-See ./V-L2.ipynb
+See [V-L2 notebook](./V-L2.ipynb)
 
 # Long packs
 
 ## Si: difc
 
-See ./Si-difc-2.ipynb
+See [Si-difc notebook](./Si-difc-2.ipynb)
 
