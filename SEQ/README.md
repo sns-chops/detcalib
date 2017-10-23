@@ -39,3 +39,11 @@ New difc and mask are saved.
 ## Align
 
 See [Alignment python script](./align_longpacks.py)
+
+# Short packs
+
+## C60: difc
+
+* Compute I(d) spectrum of all pixels for the short packs
+
+[python script](./C60-I_d_shortpacks.py)
