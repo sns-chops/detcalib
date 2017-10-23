@@ -27,9 +27,15 @@ The basic idea is
 
 See [V-L2 notebook](./V-L2.ipynb)
 
+
 # Long packs
 
 ## Si: difc
 
 See [Si-difc notebook](./Si-difc-2.ipynb)
 
+New difc and mask are saved.
+
+## Align
+
+See [Alignment python script](./align_longpacks.py)
