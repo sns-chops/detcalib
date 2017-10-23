@@ -9,7 +9,7 @@ The coordinate system
 * y: vertical up
 
 The basic idea is
-* Use white beam single crystal data (Si/C60) to obtain difc
+* Use white beam powder data (Si/C60) to obtain difc
   - Compute initial difc from nominal geometrical info of det packs
   - Obtain I(d) spectrum for each pixel using the initial geo info of det packs
   - For each pixel, fit I(d) to peaks and compare them to desired d spacing values of the crystal,
