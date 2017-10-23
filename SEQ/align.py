@@ -77,6 +77,16 @@ class InstrumentModel(object):
         msa.CalculateDIFC(InputWorkspace=wks_name, OutputWorkspace='difc')
         return mtd['difc'].extractY().flatten()
 
+    def L2(self):
+        wks_name = self.wks_name
+        pp = msa.PreprocessDetectorsToMD(InputWorkspace=wks_name, OutputWorkspace='pp')
+        pp = msa.SortTableWorkspace(pp, Columns='DetectorID')
+        L2 = np.array(pp.column('L2'))
+        # pp may contain monitors
+        nmon = (np.array(pp.column('DetectorID'))<=0).sum()
+        assert nmon + self.detID.size == L2.size
+        return L2[nmon:]
+
     def twotheta_and_L2(self):
         wks_name = self.wks_name
         pp = msa.PreprocessDetectorsToMD(InputWorkspace=wks_name, OutputWorkspace='pp')
@@ -210,6 +220,10 @@ class DetpackModel(ComponentModel):
         return np.ma.masked_array(
             self.instrument_model.difc()[self.firstIndex:self.lastIndex+1], self.mask)
 
+    def L2(self):
+        return np.ma.masked_array(
+            self.instrument_model.L2()[self.firstIndex:self.lastIndex+1], self.mask)
+
     def twotheta_and_L2(self):
         tt, L2 = self.instrument_model.twotheta_and_L2()
         return (np.ma.masked_array(tt[self.firstIndex:self.lastIndex+1], self.mask),
@@ -312,9 +326,6 @@ class FitPackTwothetaAndL2(FitPack):
         self.adjust_model(params)
         pack_model = self.pack_model
         wks_name = pack_model.instrument_model.wks_name
-        firstIndex = pack_model.firstIndex
-        lastIndex = pack_model.lastIndex
-        mask = pack_model.mask
 
         twotheta_new, L2_new = pack_model.twotheta_and_L2()
         sin_theta_new = np.sin(twotheta_new/2.)
@@ -324,8 +335,51 @@ class FitPackTwothetaAndL2(FitPack):
         
         residual = np.sum((L2_new/L2-1)**2) + np.sum((sin_theta_new/sin_theta-1)**2)
         residual /= L2.size
-        print residual
+        # print residual
         return residual
+    
+    
+class FitPack_DifcL2(FitPack):
+    
+    def __init__(self, pack_model, options, difc, L2, logger=None):
+        self.difc = np.ma.masked_array(difc[pack_model.firstIndex:pack_model.lastIndex+1], pack_model.mask)
+        self.L2 = np.ma.masked_array(L2[pack_model.firstIndex:pack_model.lastIndex+1], pack_model.mask)
+        super(FitPack_DifcL2, self).__init__(pack_model, options, logger)
+        return
+
+    def cost(self, x):
+        params0 = self.params0
+        options = self.options
+        params = opts2fullparams(x, params0, options)
+        self.adjust_model(params)
+        pack_model = self.pack_model
+
+        L2_new = pack_model.L2()
+        difc_new = pack_model.difc()
+
+        L2 = self.L2
+        difc = self.difc
+        
+        # residual = 0*np.sum((L2_new/L2-1)**2) + np.sum((difc_new/difc-1)**2)
+        residual = np.sum((difc_new-difc)**2) + np.sum((L2_new-L2)**2)*1e4
+        residual /= L2.size
+        # print residual
+        return residual
+
+
+def estimate_pack_center_position(sin_theta, L2, pack, init_center):
+    # problem: what if pixels near center are all masked?
+    pack_sin_theta = sin_theta[pack.firstIndex:pack.lastIndex+1]
+    pack_L2 = L2[pack.firstIndex:pack.lastIndex+1]
+    pack_sin_theta.shape = pack_L2.shape = 8, 128
+    center_sin_theta = np.average(pack_sin_theta[3:5, 62:66])
+    center_twotheta = np.arcsin(center_sin_theta)*2
+    center_L2 = np.average(pack_L2[3:5, 62::66])
+    y_center = init_center[1]
+    z_center = center_L2*np.cos(center_twotheta)
+    # sign: what if x is very close to zero and it could flip sign?
+    x_center = (center_L2 **2 - z_center**2 - y_center**2)**.5 * np.sign(init_center[0])
+    return x_center, y_center, z_center
     
     
 def getFirstDetID(component):
