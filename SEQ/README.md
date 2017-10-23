@@ -50,11 +50,13 @@ See [Alignment python script](./align_longpacks.py)
   -  **This takes ~5 hours at ndav2!**
 * Compute difc
   - For each pack, modify and run [this python script](./difc_shortpacks.py)
-* Calibrate
-  - For each pack, modify and run [this python script](./align_shortpacks.py)
-  - This script generates "new.xml". Copy the content to SEQ_new.xml.fit-to-difc-and-L2_Si+C60.
-* Check alignment
-  - using notebooks. See for example  [notebook for C25B](./check-C25B-only-C60.ipynb).
+
+## Calibrate
+* For each pack, modify and run [this python script](./align_shortpacks.py)
+* This script generates "new.xml". Copy the content to SEQ_new.xml.fit-to-difc-and-L2_Si+C60.
+
+## Check alignment
+* using notebooks. See for example  [notebook for C25B](./check-C25B-only-C60.ipynb).
 
 
 # Misc Notes
