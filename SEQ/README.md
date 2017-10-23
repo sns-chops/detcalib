@@ -23,6 +23,10 @@ The basic idea is
   - Compute I(d) spectrum of a pack
 
 
+# Vanadium powder data: L2
+
+See ./V-L2.ipynb
+
 # Long packs
 
 ## Si: difc
