@@ -1,9 +1,10 @@
-# Procedure
+# Overview
 
+The procedure includes
 * Use Si+V data to calibrate long packs
 * Use C60+V data to calibrate short packs
 
-Coordinate system
+The coordinate system
 * z: beam
 * y: vertical up
 
@@ -23,46 +24,37 @@ The basic idea is
   - Compute I(d) spectrum of a pack
 
 
-# Vanadium powder data: L2
+# Use vanadium powder data to obtain L2
 
 See [V-L2 notebook](./V-L2.ipynb)
 
 
 # Long packs
 
-## Si: difc
+## Use single crystal Si white beam data to obtain difc
 
 See [Si-difc notebook](./Si-difc-2.ipynb)
 
-New difc and mask are saved.
+After running the notebook, new difc and mask are saved.
 
-## Align
+## Align the detector packs using difc and L2
 
 See [Alignment python script](./align_longpacks.py)
 
 # Short packs
 
-## C60: difc
+## Use single crystal C60 white beam data to obtain difc
 
 * Compute I(d) spectrum of all pixels for the short packs
-
-[python script](./C60-I_d_shortpacks.py)
-
-**This takes ~5 hours at ndav2!**
-
+  - [python script](./C60-I_d_shortpacks.py)
+  -  **This takes ~5 hours at ndav2!**
 * Compute difc
-
-For each pack, modify and run [this python script](./difc_shortpacks.py)
-
+  - For each pack, modify and run [this python script](./difc_shortpacks.py)
 * Calibrate
-
-For each pack, modify and run [this python script](./align_shortpacks.py)
-
-This script generates "new.xml". Copy the content to SEQ_new.xml.fit-to-difc-and-L2_Si+C60.
-
+  - For each pack, modify and run [this python script](./align_shortpacks.py)
+  - This script generates "new.xml". Copy the content to SEQ_new.xml.fit-to-difc-and-L2_Si+C60.
 * Check alignment
-
-using notebooks. See for example  [notebook for C25B](./check-C25B-only-C60.ipynb).
+  - using notebooks. See for example  [notebook for C25B](./check-C25B-only-C60.ipynb).
 
 
 # Misc Notes
