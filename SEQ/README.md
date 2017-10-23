@@ -23,3 +23,9 @@ The basic idea is
   - Compute I(d) spectrum of a pack
 
 
+# Long packs
+
+## Si: difc
+
+See ./Si-difc-2.ipynb
+
