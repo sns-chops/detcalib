@@ -1,6 +1,22 @@
 #!/usr/bin/env python
 # coding: utf-8
 
+"""
+align long packs
+
+Inputs:
+
+* det ID list: difc-2-detID.npy
+* difc: difc-2-difc.npy
+* difc mask: difc-2-mask.npy
+* L2: L2table.nxs
+* SEQUOIA_Definition.xml: starting point of detector geometry
+
+Output:
+* new.xml
+
+"""
+
 from mantid import simpleapi as msa, mtd
 import numpy as np, os, math, collections
 import scipy.optimize as sopt
@@ -70,8 +86,6 @@ brow = ['B%s' % i for i in range(1, 38)]
 crow = ['C%s' % i for i in range(1, 38)]
 del crow[24] # no C25
 del crow[24] # no C26
-crow_around_forward_beam = ['C25T', 'C26T', 'C25B', 'C26B']
-# crow += crow_around_forward_beam
 drow = ['D%s' % i for i in range(1, 38)]
 packs = brow + crow + drow
 # packs = ['D%s' % i for i in range(1, 6)]
@@ -79,8 +93,6 @@ packs = brow + crow + drow
 # most of the packs are of type "eightpack"
 # the short packs are special
 pack_types = collections.defaultdict(lambda: 'eightpack')
-pack_types['C25T' ] = pack_types['C26T'] = 'eightpack-top'
-pack_types['C25B' ] = pack_types['C26B'] = 'eightpack-bottom'
 
 template = """
   <type name="{0}">
@@ -99,7 +111,7 @@ for pack in packs:
     pack_model = instrument_model.component('%s/%s'%(pack, pack_type), type='detpack')
     print pack_model.getParams()
     init_center = pack_model.position()
-    estimate = align.estimate_pack_center_position(sin_theta, L2, pack_model, init_center)
+    estimate = align.estimate_pack_center_position(sin_theta, L2, pack_model, init_center) # just for checking
     # fit = align.FitPackTwothetaAndL2(pack_model, options, sin_theta, L2, logger)
     fit = align.FitPack_DifcL2(pack_model, options, difc, L2, logger)
     # fit = align.FitPackDifc(pack_model, options, difc, logger)
