@@ -48,7 +48,7 @@ See [Alignment python script](./align_longpacks.py)
 
 [python script](./C60-I_d_shortpacks.py)
 
-** This takes ~5 hours at ndav2! **
+**This takes ~5 hours at ndav2!**
 
 * Compute difc
 
