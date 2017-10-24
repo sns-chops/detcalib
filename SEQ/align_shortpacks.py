@@ -11,9 +11,9 @@ import align
 # ## Load difc
 detID = np.load('./difc-2-detID.npy')
 
-# for short packs: use C60 data for just C26B
-difc = np.load("./C60-difc-2-C26B.npy")
-mask = np.load("./C60-difc-2-C26B-mask.npy")
+# for short packs: use C60 data for just C25T
+difc = np.load("./C60-difc-2-C25T.npy")
+mask = np.load("./C60-difc-2-C25T-mask.npy")
 
 # ## Load L2
 L2_calib = msa.Load('L2table.nxs')
@@ -66,7 +66,7 @@ options['BetaRotation']=False
 options['GammaRotation']=False
 
 crow_around_forward_beam = ['C25T', 'C26T', 'C25B', 'C26B']
-packs = ['C26B']
+packs = ['C25T']
 
 # most of the packs are of type "eightpack"
 # the short packs are special

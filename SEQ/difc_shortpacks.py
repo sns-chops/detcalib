@@ -9,18 +9,20 @@ dvalues = [2.72509327,  2.89039789, 4.26940063,  5.00631601, 8.17527981]
 dvalues = dvalues[4:]
 nxspath = '/SNS/SEQ/IPTS-19573/nexus/SEQ_130249.nxs.h5'
 initial_idf = './SEQUOIA_Definition_guessshortpacks.xml'
-packname = 'C26B'
-packtype = 'eightpack-bottom'
+packname = 'C25T'
+# packtype = 'eightpack-bottom'
+packtype = 'eightpack-top'
 x_path = 'C60-C26T-I_d-x.npy'
-y_path = 'C60-I_d-y-C26B.npy'
+# y_path = 'C60-I_d-y-C25T.npy'
+y_path = 'C60-C25T-I_d-y_all_pixels.npy'
 d_spacing_max_mismatch = 0.2 # maximum fractional mismatch of d spacing values allowed.
 d_spacing_peak_width = 0.1 # fractional width of d spacing peak.
 maxchisq = 3.  # if chisq>maxchisq, mask this pixel
 min_counts = 2000  # if total couts of the peak < min_counts, don't count this peak
 
 # Outputs
-difc_outpath = "C60-difc-2-C26B.npy"
-difc_mask_outpath = 'C60-difc-2-C26B-mask.npy'
+difc_outpath = "C60-difc-2-C25T.npy"
+difc_mask_outpath = 'C60-difc-2-C25T-mask.npy'
 
 
 # ## Compute nominal difc
@@ -115,7 +117,7 @@ def fit_pixel(x, y, dvalues, peaks_thispixel=None, chisq_thispixel=None):
     return peaks_thispixel
 
 
-# ## Loop over all pixels in C25T
+# ## Loop over all pixels in the pack
 newdifc = difc.copy()
 mask = np.zeros(difc.shape, dtype=bool)
 chisq = np.zeros((len(dvalues),) + difc.shape, dtype=float)
