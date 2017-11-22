@@ -12,20 +12,30 @@ def get_I_d(nxs_files, init_IDF, outdir, packs, dt = 1000., d_axis=(2.,11.,0.02)
     d_axis: dmin, dmax, delta_d. e.g. 2., 11., 0.02
     Npixels_per_pack: number of pixels per pack
 
+    Output files:
+    * difc-nominal.npy
+    * detIDs.npy
+    * I_d-xbb.npy
+    * I_d-y-PACKNAME.npy
+    * pack-PACKNAME.yaml
+
     NOTE:
     * Assumed that the difc array from CalculateDIFC is ordered according to the "spectrrum list" in
       the mantid workspace. See function getDetIDs
+    * Different combinations of nxs_files, init_IDF, d_axis should use different outdirs
     """
+    if not os.path.exists(outdir): os.makedirs(outdir)
     # ## Compute nominal difc using first file in the list
     nxspath = nxs_files[0]
     ws = msa.LoadEventNexus(nxspath, FilterByTimeStart=0, FilterByTimeStop=1) # load just one second
-    if init_IDF:
-        msa.LoadInstrument(ws, Filename=init_IDF, RewriteSpectraMap=False)
+    #
+    msa.LoadInstrument(ws, Filename=init_IDF, RewriteSpectraMap=False)
+    import shutil
+    shutil.copyfile(init_IDF, os.path.join(outdir, 'init_IDF.xml'))
+    #
     difc = msa.CalculateDIFC(InputWorkspace=ws)
     difc = difc.extractY().flatten().copy()
     msa.DeleteWorkspace('difc')
-    #
-    if not os.path.exists(outdir): os.makedirs(outdir)
     np.save(os.path.join(outdir, 'difc-nominal.npy'), difc)
     # IDs of all pixels
     detIDs = getDetIDs(ws)
@@ -60,8 +70,7 @@ def get_I_d(nxs_files, init_IDF, outdir, packs, dt = 1000., d_axis=(2.,11.,0.02)
             print "* tstart", tstart
             tend = min(t_total-1, tstart+dt)
             ws = msa.LoadEventNexus(nxsfile, FilterByTimeStart=tstart, FilterByTimeStop=tend)
-            if init_IDF:
-                msa.LoadInstrument(ws, Filename=init_IDF, RewriteSpectraMap=False)
+            msa.LoadInstrument(ws, Filename=init_IDF, RewriteSpectraMap=False)
             I_d = msa.ConvertUnits(InputWorkspace=ws, Target='dSpacing', EMode='Elastic')
             I_d = msa.Rebin(InputWorkspace=I_d, Params='%s,%s,%s' % (dmin, delta_d, dmax))
 
@@ -97,8 +106,21 @@ def get_I_d(nxs_files, init_IDF, outdir, packs, dt = 1000., d_axis=(2.,11.,0.02)
     for ipack, packname in enumerate(packs):
         y_pack = y_matrix[ipack]
         packname1 = packname.split('/')[0] # "C25T"
+        # save y values of I(d) for the pack
         np.save(os.path.join(outdir, "I_d-y-%s.npy" % packname1), y_pack)
+        # save pack info
+        first, last = pack2pixelID_start_stop[packname]
+        pixelIDs = dict(first=first, last=last)
+        pack_info = dict(pixelIDs=pixelIDs)
+        dumpYaml(pack_info, os.path.join(outdir, 'pack-%s.yaml' % packname1))
         continue
+    return
+
+
+def dumpYaml(d, path):
+    import yaml
+    with open(path, 'wt') as ostream:
+        yaml.dump(d, ostream, default_flow_style=False)
     return
 
 
