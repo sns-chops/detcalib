@@ -53,7 +53,8 @@ class Align:
             self,
             difc, mask, pack = 'C25T',
             ofile = open('new.xml', 'wt'),
-            logger = None
+            logger = None,
+            params0 = None,
             ):
         """
         difc, mask: for a pack
@@ -68,11 +69,12 @@ class Align:
         #
         L1 = self.L1
         L2 = self.L2
+        # import pdb; pdb.set_trace()
         # Apply mask
         difc = np.ma.masked_array(difc, mask)
         L2 = np.ma.masked_array(L2, mask)
         # calculate sin(theta)
-        sin_theta = difc/(0.0015882549421289758*1e6) * np.pi / (L1+L2)
+        self.sin_theta = sin_theta = difc/(0.0015882549421289758*1e6) * np.pi / (L1+L2)
         # 
         wks_name = "alignedWorkspace"
         msa.LoadEmptyInstrument(self.init_IDF, OutputWorkspace=wks_name)
@@ -83,13 +85,13 @@ class Align:
         #
         print "- Working on %s" % (pack,)
         pack_type = pack_types[pack]
-        pack_model = instrument_model.component('%s/%s'%(pack, pack_type), type='detpack')
+        self.pack_model = pack_model = instrument_model.component('%s/%s'%(pack, pack_type), type='detpack')
         print "- pack params:", pack_model.getParams()
         init_center = pack_model.position()
         estimate = align_utils.estimate_pack_center_position(sin_theta, L2, pack_model, init_center)
         # fit = align_utils.FitPackTwothetaAndL2(pack_model, options, sin_theta, L2, logger)
-        fit = align_utils.FitPack_DifcL2(pack_model, options, difc, L2, logger)
-        # fit = align_utils.FitPackDifc(pack_model, options, difc, logger)
+        fit = align_utils.FitPack_DifcL2(pack_model, options, difc, L2, logger=logger, params0=params0)
+        # fit = align_utils.FitPackDifc(pack_model, options, difc, logger=logger)
         fit.fit()
         print "- Estimate:", estimate
         x,y,z, ry,rz,rx = new_params = pack_model.getParams()
@@ -97,7 +99,7 @@ class Align:
         s = template.format(pack,pack_type, x,y,z,ry)
         print s
         ofile.write(s)
-        return new_params
+        return new_params, fit
 
     def _prepare_difc_and_mask_from_pack_difc(self, difc, mask, pack):
         "prepare full difc and mask array for all pixels from a pack difc array"
@@ -108,6 +110,9 @@ class Align:
         difc1 = self.difc_all.copy(); difc1[pack_slice] = difc
         mask1 = np.zeros(difc1.shape, dtype=bool);
         mask1[pack_slice] = mask
+        self.pack_difc = difc; self.pack_mask = mask
+        self.pack_L2 = self.L2[pack_slice]
+        self.pack_sin_theta = self.pack_difc/(0.0015882549421289758*1e6) * np.pi / (self.L1+self.pack_L2)
         return difc1, mask1
 
 
