@@ -10,11 +10,9 @@ The coordinate system
 
 The basic idea is
 * Use white beam powder data (Si/C60) to obtain difc
-  - Compute initial difc from nominal geometrical info of det packs
-  - Obtain I(d) spectrum for each pixel using the initial geo info of det packs
-  - For each pixel, fit I(d) to peaks and compare them to desired d spacing values of the crystal,
-    calculate a ratio of adjustment, multiply the ratio wit the initial difc to obtain
-    the calibrated difc
+  - Compute initial difc from nominal geometrical info of det packs and save it
+  - Obtain I(tof) spectrum for each pixel. see for example, Si-generate-I_tof_spectra.ipynb
+  - For each pixel, fit I(tof) to peaks with a scale factor (difc) to convert to d-spacing.
 * Use V powder data to obtain L2
   - For each pixel, compute tof of the elastic peak, then determine L2
 * Use difc+L2 of all pixels in a pack (excluding bad fits etc) to optimize the
@@ -28,32 +26,31 @@ The basic idea is
 
 See [V-L2 notebook](./V-L2.ipynb)
 
+# Nominal difc
 
-# Long packs
+See [notebook](nominal_difc.ipynb) or [py module](lib/nominal_difc.py)
 
-## Use single crystal Si white beam data to obtain difc
+# I(tof) spectra
+See [Si notebook](Si-generate-I_tof_spectra.ipynb)
 
-See [Si-difc notebook](./Si-difc-2.ipynb)
 
-After running the notebook, new difc and mask are saved.
+# difc
 
-## Align the detector packs using difc and L2
+For each pack, try to find the best dataset (either Si or C60) for the purpose
+of calculating difc.
 
-See [Alignment python script](./align_longpacks.py)
+The [calibrate module](lib/calibrate.py) is used for calculate difc and optionally
+fit position and orientation of a pack.
 
-# Short packs
+For each row, there is a master notebook. For example [C row](C-row/calibrate-C-row.ipynb).
+Some packs need special attention because it could be hard to tell whether Si or C60 is
+the better dataset to use.
 
-## Use single crystal C60 white beam data to obtain difc
+C row: other than the short packs, most packs are fairly straight forward.
+D row: most packs are good, but some packs on top of the forward beam are hard
+B row: similar to D. packs near the forward beam are hard. Especially hard is B25 and B26.
+See the Dec 29, 2017 update for more details.
 
-* Compute I(d) spectrum of all pixels for the short packs
-  - [python script](./C60-I_d_shortpacks.py)
-  -  **This takes ~5 hours at ndav2!**
-* Compute difc
-  - For each pack, modify and run [this python script](./difc_shortpacks.py)
-
-## Calibrate
-* For each pack, modify and run [this python script](./align_shortpacks.py)
-* This script generates "new.xml". Copy the content to SEQ_new.xml.fit-to-difc-and-L2_Si+C60.
 
 ## Check alignment
 * using notebooks. See for example  [notebook for C25B](./check-C25B-only-C60.ipynb).
