@@ -28,10 +28,12 @@ See [V-L2 notebook](./V-L2.ipynb)
 
 # Nominal difc
 
-See [notebook](nominal_difc.ipynb) or [py module](lib/nominal_difc.py)
+See [notebook](nominal_difc.ipynb) or [py module](lib/nominal_difc.py).
+
+It is also available in [get_difc_from_Itof](lib/get_difc_from_Itof.py).
 
 # I(tof) spectra
-See [Si notebook](Si-generate-I_tof_spectra.ipynb)
+See [Si notebook](Si-generate-I_tof-spectra.ipynb)
 
 
 # difc
