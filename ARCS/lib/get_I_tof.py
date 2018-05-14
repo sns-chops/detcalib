@@ -131,6 +131,8 @@ def getDetIDs(ws):
 def getFirstLastPixelIDs(ws, name="C26T/eightpack-top"):
     instrument = ws.getInstrument()
     pack = instrument.getComponentByName(name)
+    if not pack:
+        raise RuntimeError("Failed to get Component %s" % (name,))
     firstpixel = pack[0][0].getID()
     lasttube = pack[pack.nelements()-1]
     lastpixel = lasttube[lasttube.nelements()-1]
